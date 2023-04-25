@@ -13,7 +13,7 @@ class Macro:
 
     #15: Macro(['/bin/sleep', '1'], idle_color=(238,130,238), active_color=(138,43,226)),
 keymap = {
-    15: Macro(['/bin/sleep', '1'], idle_color=(30,50,30), active_color=(238,130,238)),
+    15: Macro(['/home/pi/.cargo/bin/simon'], idle_color=(30,50,30), active_color=(238,130,238)),
 }
 
 # TODO: use select or something similar?
