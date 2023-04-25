@@ -21,11 +21,17 @@ if __name__ == '__main__':
 
     popens = {}
 
-    keybows = [ comport for comport in adafruit_board_toolkit.circuitpython_serial.data_comports()
-                        if 'Keybow 2040' == comport.product ]
-    if len(keybows) == 0:
-        print("Could not connect to Keybow: No Keybow data ports detected.", file=sys.stderr)
-        sys.exit(1)
+    while True:
+        keybows = [ comport for comport in adafruit_board_toolkit.circuitpython_serial.data_comports()
+                            if 'Keybow 2040' == comport.product ]
+        if len(keybows) == 0:
+            wait_time = 1
+            print("Could not connect to Keybow: No Keybow data ports detected.", file=sys.stderr)
+            print(f'Trying again in {wait_time} seconds...', file=sys.stderr)
+            time.sleep(wait_time)
+        else:
+            break
+
     if len(keybows) > 1:
         # TODO: let the user use the serial number to specify which port to listen on
         print("Could not connect to Keybow: More than one data port detected.", file=sys.stderr)
