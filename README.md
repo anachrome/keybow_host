@@ -1,0 +1,2 @@
+- `code.py` should go on the Keybow
+- `keybow_host.py` should be run from the host machine
