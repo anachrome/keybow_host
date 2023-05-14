@@ -1,3 +1,4 @@
+from collections import defaultdict
 import subprocess
 import sys
 import time
@@ -11,10 +12,12 @@ class Macro:
         self.idle_color = idle_color
         self.active_color = active_color
 
-    #15: Macro(['/bin/sleep', '1'], idle_color=(238,130,238), active_color=(138,43,226)),
 keymap = {
+    #15: Macro(['/bin/sleep', '1'], idle_color=(238,130,238), active_color=(138,43,226)),
     15: Macro(['/home/pi/.cargo/bin/simon'], idle_color=(30,50,30), active_color=(238,130,238)),
 }
+
+active_keys = defaultdict(bool)
 
 # TODO: use select or something similar?
 if __name__ == '__main__':
@@ -56,15 +59,17 @@ if __name__ == '__main__':
                 if data_port.in_waiting >= 2:
                     key, state = data_port.read(2)
                     if state == 1:
-                        if key in keymap:
+                        if key in keymap and not active_keys[key]:
                             popens[key] = subprocess.Popen(keymap[key].script)
+                            active_keys[key] = True
                             data_port.write(bytes([key, *keymap[key].active_color]))
 
                 # check completed processes
                 for key, popen in list(popens.items()):
                     if popen.poll() is not None:
-                        data_port.write(bytes([key, *keymap[key].idle_color]))
                         del popens[key]
+                        active_keys[key] = False
+                        data_port.write(bytes([key, *keymap[key].idle_color]))
         except KeyboardInterrupt:
             data_port.reset_output_buffer()
             for key in keymap:
