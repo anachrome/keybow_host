@@ -15,6 +15,7 @@ class Macro:
 keymap = {
     #15: Macro(['/bin/sleep', '1'], idle_color=(238,130,238), active_color=(138,43,226)),
     15: Macro(['/home/pi/.cargo/bin/simon'], idle_color=(30,50,30), active_color=(238,130,238)),
+    14: Macro(['/usr/bin/killall', '/home/pi/.cargo/bin/simon'], idle_color=(200, 0, 0), active_color=(200, 0, 0)),
 }
 
 active_keys = defaultdict(bool)
